@@ -1,0 +1,95 @@
+
+        <!doctype html>
+        <html>
+            <head>
+                <!-- By Fekirine Djallal -->
+                <meta charset="UTF-8" />
+                <title>Genrate new endpoints</title>
+                <script type="text/javascript" src="static/js/read-csv.js"></script>
+                
+          
+                
+            </head>
+            <body>
+                     <h1 >Generate New EndPoints</h1> 
+                     <h2>txt files only</h2>
+                     <input type="file" id="csvFileInput" onchange="handleFiles(this.files)" >        
+            </body>
+            <script>
+                //function to read files
+
+                function handleFiles(files) {
+      // Check for the various File API support.
+      if (window.FileReader) {
+          // FileReader are supported.
+          getAsText(files[0]);
+      } else {
+          alert('FileReader are not supported in this browser.');
+      }
+    }
+
+    function getAsText(fileToRead) {
+      var reader = new FileReader();
+      // Read file into memory as UTF-8      
+      reader.readAsText(fileToRead);
+      // Handle errors load
+      reader.onload = loadHandler;
+      reader.onerror = errorHandler;
+    }
+
+    function loadHandler(event) {
+      var csv = event.target.result;
+      processData(csv);
+    }
+
+    function processData(csv) {
+        var allTextLines = csv.split(/\r\n|\n/);
+        var result = "";
+        for (let k = 0; k < allTextLines.length; k++){
+            
+
+                    let splarray = allTextLines[k].split("/");
+                    for (let i = 0; i < splarray.length; i++){
+                        if (splarray.length > 3){
+                            var newArr = splarray.slice(0,-1);
+                            let b = newArr.join("/"); 
+                            result += b +"\n";
+                            splarray = newArr;
+                        }
+
+                    }
+                    for (let i = 0; i < splarray.length; i++){
+                        if (splarray.length > 3){
+                            var newArr = splarray.slice(0,-1);    
+                            let b = newArr.join("/");                          
+                            result += b +"\n";
+                            splarray = newArr;
+
+                        }
+
+                    }
+                    
+              
+        }
+    var file = new Blob([result],{type:"text"});
+    var anchor = document.createElement("a");
+    anchor.href = URL.createObjectURL(file);
+    anchor.download = "save.txt";
+    anchor.click();
+    }
+
+    function errorHandler(evt) {
+      if(evt.target.error.name == "NotReadableError") {
+          alert("Canno't read file !");
+      }
+    }
+
+
+
+    
+
+
+            </script>
+        </html>
+        
+
